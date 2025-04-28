@@ -6,6 +6,25 @@
 [![Status](https://img.shields.io/badge/Status-In%20Progress-lightgrey)]()
 
 > _Turning sweat into watts!_ 🚴⚡
+
+## 📋 Table of Contents
+
+- [💡 Project Idea](#-project-idea)
+- [📚 Data Sources](#-data-sources)
+- [🔢 Assumptions](#-assumptions)
+- [📈 Current Status](#-current-status)
+- [🔧 Tech Stack](#-tech-stack)
+- [🔄 Data Pipeline](#-data-pipeline)
+- [Project Structure](#project-structure)
+- [Local Development](#local-development)
+  - [💾 Local Database Access](#-local-database-access)
+- [AWS Deployment](#aws-deployment)
+- [🔮 Next Steps](#-next-steps)
+- [🤝 Contributions](#-contributions)
+- [License](#license)
+
+This project contains an Airflow setup to analyze energy savings data across Europe.
+
 ## 💡 Project Idea
 
 - The **World Health Organization (WHO)** recommends that adults perform at least **150 minutes of moderate-intensity activity per week**.
@@ -13,8 +32,6 @@
 - By combining **population data** and **machine efficiency**, we estimate the **potential energy output** for each country.
 
 🔋 **Imagine** millions of people exercising — and **generating clean energy** at the same time!
-
-This project contains an Airflow setup to analyze energy savings data across Europe.
 
 ## 📚 Data Sources
 
