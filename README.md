@@ -6,6 +6,13 @@
 [![Status](https://img.shields.io/badge/Status-In%20Progress-lightgrey)]()
 
 > _Turning sweat into watts!_ 🚴⚡
+## 💡 Project Idea
+
+- The **World Health Organization (WHO)** recommends that adults perform at least **150 minutes of moderate-intensity activity per week**.
+- Many **modern gym machines** (e.g., bikes, ellipticals) can **harvest energy** from workouts.
+- By combining **population data** and **machine efficiency**, we estimate the **potential energy output** for each country.
+
+🔋 **Imagine** millions of people exercising — and **generating clean energy** at the same time!
 
 This project contains an Airflow setup to analyze energy savings data across Europe.
 
@@ -167,14 +174,6 @@ The transformation layer follows software engineering best practices:
 ## License
 
 See the [LICENSE](LICENSE) file for details.
-
-## 💡 Project Idea
-
-- The **World Health Organization (WHO)** recommends that adults perform at least **150 minutes of moderate-intensity activity per week**.
-- Many **modern gym machines** (e.g., bikes, ellipticals) can **harvest energy** from workouts.
-- By combining **population data** and **machine efficiency**, we estimate the **potential energy output** for each country.
-
-🔋 **Imagine** millions of people exercising — and **generating clean energy** at the same time!
 
 ---
 
