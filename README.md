@@ -42,6 +42,34 @@ This project contains an Airflow setup to analyze energy savings data across Eur
 - 📊 Visualizations coming soon.
 
 ---
+## 🔧 Tech Stack
+
+Our project is built on a modern data engineering stack:
+
+### Core Technologies
+- **Apache Airflow**: Workflow orchestration platform for scheduling and monitoring data pipelines
+- **PostgreSQL**: Relational database used for both Airflow metadata and our Data Warehouse
+- **dbt (data build tool)**: SQL-based transformation tool following software engineering best practices
+- **Docker**: Containerization for consistent development and deployment environments
+- **Python**: Primary programming language for DAGs, data processing, and utilities
+
+### Infrastructure
+- **Docker Compose**: Local development environment with multiple services
+- **Terraform**: Infrastructure as Code (IaC) for AWS deployment
+- **AWS ECS**: Container orchestration for production workloads
+- **AWS ECR**: Repository for Docker images
+
+### Data Processing
+- **Pandas**: Data manipulation and analysis library
+- **SQLAlchemy**: SQL toolkit and Object-Relational Mapping
+- **psycopg2**: PostgreSQL adapter for Python
+
+### Testing & Quality
+- **dbt test**: Data quality validation framework
+- **Pytest**: Python testing framework (for DAG validation)
+- **Custom Validators**: Domain-specific validation tests
+
+This architecture allows for scalable, maintainable, and testable data pipelines with clear separation of concerns between extraction, transformation, and analysis layers.
 
 ## Project Structure
 
