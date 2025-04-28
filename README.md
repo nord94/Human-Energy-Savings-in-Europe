@@ -38,6 +38,23 @@ This project estimates **how much electricity could be generated** if the entire
 
 ---
 
+## Infrastructure Setup (AWS with Terraform)
+
+This project uses Terraform to automate infrastructure deployment, including Airflow (ECS Fargate) and PostgreSQL (RDS) in AWS.
+
+### Prerequisites:
+- Terraform installed ([Install Terraform](https://developer.hashicorp.com/terraform/downloads))
+- AWS CLI configured with credentials ([Setup AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html))
+
+### Deploying Infrastructure:
+```bash
+cd infra
+terraform init
+terraform apply
+```
+
+---
+
 ## 📈 Current Status
 
 - ✅ Data sources identified and connected.
