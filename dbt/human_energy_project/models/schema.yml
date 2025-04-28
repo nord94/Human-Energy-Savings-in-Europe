@@ -1,0 +1,46 @@
+version: 2
+
+models:
+  - name: stg_eurostat_age_groups
+    description: "Staging model for Eurostat age groups data"
+    columns:
+      - name: geo
+        description: "Geographical identifier"
+      - name: country
+        description: "Country name"
+      - name: time_period
+        description: "Year of data collection"
+      - name: total_population_by_age_group
+        description: "Sum of population percentages in target age groups (15-24, 25-49, 50-64)"
+
+  - name: stg_eurostat_population
+    description: "Staging model for Eurostat total population data"
+    columns:
+      - name: geo
+        description: "Geographical identifier"
+      - name: time_period
+        description: "Year of data collection"
+      - name: country
+        description: "Country name"
+      - name: total_population
+        description: "Total population"
+
+  - name: stg_european_power_plants
+    description: "Staging model for European power plants data"
+    columns:
+      - name: country_long
+        description: "Country name"
+      - name: primary_fuel
+        description: "Primary energy source"
+      - name: total_power_out_mw
+        description: "Total power output in megawatts"
+
+  - name: energy_comparison
+    description: "Comparison of energy production between conventional sources and theoretical human power"
+    columns:
+      - name: country
+        description: "Country name"
+      - name: fuel
+        description: "Energy source (including 'Human power')"
+      - name: mwatthrs_per_week
+        description: "Megawatt hours per week of energy produced" 
