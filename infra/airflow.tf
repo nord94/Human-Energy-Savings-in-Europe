@@ -62,6 +62,37 @@ resource "aws_ecs_task_definition" "airflow" {
   ])
 }
 
+resource "aws_ecs_task_definition" "airflow_db_upgrade" {
+  family                   = "airflow-db-upgrade-task"
+  network_mode             = "awsvpc"
+  requires_compatibilities = ["FARGATE"]
+  cpu                      = "512"
+  memory                   = "1024"
+  execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
+
+  container_definitions = jsonencode([
+    {
+      name      = "airflow-db-upgrade"
+      image     = "apache/airflow:2.8.1"   # same version as your webserver
+      command   = ["bash", "-c", "airflow db upgrade && sleep 10"]
+      environment = [
+        {
+          name  = "AIRFLOW__CORE__SQL_ALCHEMY_CONN",
+          value = "postgresql+psycopg2://airflow:${var.db_password}@${aws_db_instance.postgres.address}:5432/airflow"
+        }
+      ]
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = "/ecs/airflow"
+          awslogs-region        = var.aws_region
+          awslogs-stream-prefix = "ecs"
+        }
+      }
+    }
+  ])
+}
+
 resource "aws_security_group" "ecs_airflow" {
   name        = "ecs-airflow-sg"
   description = "Allow Airflow ECS inbound traffic"
