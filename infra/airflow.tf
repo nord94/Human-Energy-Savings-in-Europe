@@ -13,7 +13,7 @@ resource "aws_ecs_service" "airflow_service" {
 
   load_balancer {
     target_group_arn = aws_lb_target_group.airflow_tg.arn
-    container_name   = "debug-container"
+    container_name   = "airflow-webserver"
     container_port   = 8080
   }
 
@@ -32,20 +32,22 @@ resource "aws_ecs_task_definition" "airflow" {
   family                   = "airflow-task"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  cpu                      = "512"
-  memory                   = "1024"
+  cpu                      = "1024"
+  memory                   = "2048"
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
 
   container_definitions = jsonencode([
     {
-      name      = "debug-container"
-      image     = "busybox"
-      essential = true
-      command   = ["sleep", "3600"]
-      portMappings = [
+      name      = "airflow-webserver"
+      image     = "apache/airflow:2.8.1"
+      portMappings = [{
+        containerPort = 8080
+        hostPort      = 8080
+      }]
+      environment = [
         {
-          containerPort = 8080
-          hostPort      = 8080
+          name  = "AIRFLOW__CORE__SQL_ALCHEMY_CONN",
+          value = "postgresql+psycopg2://airflow:${var.db_password}@${aws_db_instance.postgres.address}:5432/airflow"
         }
       ]
       logConfiguration = {
