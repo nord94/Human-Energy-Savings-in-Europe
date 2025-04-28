@@ -10,4 +10,8 @@ GRANT ALL ON TABLES TO airflow;
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on; 
+SET standard_conforming_strings = on;
+
+-- Ensure airflow user has proper permissions
+GRANT ALL PRIVILEGES ON DATABASE airflow TO airflow;
+GRANT ALL PRIVILEGES ON SCHEMA airflow TO airflow; 

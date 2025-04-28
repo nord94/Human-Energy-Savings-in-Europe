@@ -32,7 +32,9 @@ services:
       retries: 5
 
   airflow-webserver:
-    build: ./docker/airflow
+    build: 
+      context: ./docker/airflow
+      no_cache: true
     depends_on:
       postgres:
         condition: service_healthy
@@ -63,7 +65,9 @@ services:
       start_period: 60s
 
   airflow-scheduler:
-    build: ./docker/airflow
+    build: 
+      context: ./docker/airflow
+      no_cache: true
     depends_on:
       postgres:
         condition: service_healthy

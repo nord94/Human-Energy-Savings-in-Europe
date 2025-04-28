@@ -8,22 +8,22 @@ RUN apt-get update \
         curl \
         wget \
         vim \
+        postgresql-client \
     && apt-get autoremove -yqq --purge \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# Create entrypoint script
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 USER airflow
 
-# Initialize the database
-RUN airflow db init
+# Install additional Python packages
+RUN pip install --no-cache-dir \
+    sqlalchemy \
+    psycopg2-binary
 
-# Create default admin user
-RUN airflow users create \
-    --username admin \
-    --password admin \
-    --firstname Admin \
-    --lastname User \
-    --role Admin \
-    --email admin@example.com
+HEALTHCHECK CMD curl --fail http://localhost:8080/health || exit 1
 
-HEALTHCHECK CMD curl --fail http://localhost:8080/health || exit 1 
+ENTRYPOINT ["/entrypoint.sh"] 
