@@ -41,7 +41,6 @@ This project contains an Airflow setup to analyze energy savings data across Eur
 ├── logs/                  # Airflow logs directory
 ├── plugins/               # Airflow plugins directory
 ├── scripts/               # Utility scripts
-│   └── build_and_push.sh  # Script to build and push Docker images to ECR
 ├── terraform/             # Terraform configuration
 │   ├── main.tf            # Main Terraform configuration
 │   ├── outputs.tf         # Terraform outputs
@@ -100,14 +99,15 @@ This project contains an Airflow setup to analyze energy savings data across Eur
 
 3. Build and push the Docker images to ECR:
    ```
-   cd ../scripts
-   chmod +x build_and_push.sh
-   ./build_and_push.sh
+   docker-compose -f docker-compose-build.yml build
+   aws ecr get-login-password | docker login --username AWS --password-stdin <your-aws-account-id>.dkr.ecr.<region>.amazonaws.com
+   docker tag human-energy-airflow:latest <your-aws-account-id>.dkr.ecr.<region>.amazonaws.com/human-energy-airflow:latest
+   docker push <your-aws-account-id>.dkr.ecr.<region>.amazonaws.com/human-energy-airflow:latest
    ```
 
 4. Access the deployed Airflow instance:
    ```
-   cd ../terraform
+   cd terraform
    echo "Airflow URL: http://$(terraform output -raw airflow_load_balancer_dns)"
    ```
 
