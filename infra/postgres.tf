@@ -1,6 +1,6 @@
 resource "aws_db_subnet_group" "postgres_subnet_group" {
   name       = "postgres-subnet-group"
-  subnet_ids = [aws_subnet.public.id]
+  subnet_ids = [aws_subnet.public_a.id, aws_subnet.public_b.id]
 }
 
 resource "aws_security_group" "rds_sg" {
@@ -9,11 +9,11 @@ resource "aws_security_group" "rds_sg" {
   vpc_id      = aws_vpc.main.id
 
   ingress {
-    description      = "Postgres from Airflow ECS"
-    protocol         = "tcp"
-    from_port        = 5432
-    to_port          = 5432
-    cidr_blocks      = ["10.0.0.0/16"]
+    description = "Postgres from Airflow ECS"
+    protocol    = "tcp"
+    from_port   = 5432
+    to_port     = 5432
+    cidr_blocks = ["10.0.0.0/16"]
   }
 
   egress {
@@ -25,16 +25,16 @@ resource "aws_security_group" "rds_sg" {
 }
 
 resource "aws_db_instance" "postgres" {
-  identifier              = "airflow-postgres"
-  allocated_storage       = 20
-  engine                  = "postgres"
-  engine_version          = "15.4"
-  instance_class          = "db.t4g.micro"
-  username                = "airflow"
-  password                = "yourStrongPassword"
-  db_subnet_group_name    = aws_db_subnet_group.postgres_subnet_group.name
-  vpc_security_group_ids  = [aws_security_group.rds_sg.id]
-  publicly_accessible     = false
-  skip_final_snapshot     = true
+  identifier             = "airflow-postgres"
+  allocated_storage      = 20
+  engine                 = "postgres"
+  engine_version         = "17.2"
+  instance_class         = "db.t4g.micro"
+  username               = "airflow"
+  password               = "yourStrongPassword"
+  db_subnet_group_name   = aws_db_subnet_group.postgres_subnet_group.name
+  vpc_security_group_ids = [aws_security_group.rds_sg.id]
+  publicly_accessible    = false
+  skip_final_snapshot    = true
 }
 
