@@ -16,7 +16,18 @@ This project contains an Airflow setup to analyze energy savings data across Eur
 │   ├── dwh_connection_check.py     # DAG to verify DWH connection
 │   ├── example_dag.py              # Example DAG for testing
 │   ├── extract_eurostat_data.py    # DAG to extract population data from Eurostat
-│   └── extract_wri_data.py         # DAG to extract European power plant data from WRI
+│   ├── extract_wri_data.py         # DAG to extract European power plant data from WRI
+│   └── transform_data.py           # DAG to transform data using dbt
+├── dbt/                   # dbt project for data transformation
+│   ├── human_energy_project/       # dbt project directory
+│   │   ├── models/                 # dbt models
+│   │   │   ├── schema.yml          # Schema definitions and tests
+│   │   │   ├── marts/              # Marts models for reporting
+│   │   │   └── staging/            # Staging models
+│   │   ├── macros/                 # Custom macros including data tests
+│   │   └── dbt_project.yml         # dbt project configuration
+│   ├── profiles.yml                # dbt connection profiles
+│   └── run_dbt.sh                  # Script to run dbt commands
 ├── docker/                # Docker configuration files
 │   ├── airflow/           # Airflow Docker configuration
 │   │   ├── Dockerfile     # Airflow Dockerfile
@@ -108,7 +119,7 @@ This project contains an Airflow setup to analyze energy savings data across Eur
 
 ## Data Pipeline
 
-The project includes automated data pipelines for extracting and loading data related to Europe's energy usage:
+The project includes automated data pipelines for extracting, transforming, and loading data related to Europe's energy usage:
 
 ### Data Sources
 
@@ -128,11 +139,30 @@ The setup includes a dedicated PostgreSQL database serving as a Data Warehouse w
 DAGs (Directed Acyclic Graphs) handle the ETL processes:
 
 - `dwh_connection_check`: Verifies connectivity to the DWH database
-- `extract_eurostat_data`: Extracts and loads population statistics
-- `extract_wri_data`: Extracts and loads European power plant data
+- `extract_eurostat_data`: Extracts and loads population statistics from Eurostat
+- `extract_wri_data`: Extracts and loads European power plant data from WRI
+- `transform_data`: Transforms raw data using dbt to create analytical models
 - `example_dag`: Sample DAG for testing the Airflow setup
 
-All DAGs follow a pattern of checking database connectivity before extracting and loading data, with proper error handling and logging.
+All DAGs follow a pattern of checking database connectivity before performing their operations, with proper error handling and logging.
+
+### Data Transformation with dbt
+
+We use [dbt (data build tool)](https://www.getdbt.com/) to transform the raw data loaded into our data warehouse:
+
+- **Modular transformations**: Well-organized SQL transformations in the dbt project
+- **Testing and validation**: Automated tests ensure data quality, including custom tests to validate European countries
+- **Documentation**: Self-documenting models with comprehensive descriptions
+
+Key models include:
+
+- `energy_comparison`: Combines power plant data with population statistics to compare conventional energy sources with theoretical human power generation
+
+The transformation layer follows software engineering best practices:
+
+- **Version control**: All transformations are versioned and tested
+- **Data validation**: Automated tests run after transformations to ensure data quality
+- **Environment-based deployment**: Separate dev/prod environments controlled by profiles
 
 ## License
 
@@ -180,16 +210,91 @@ See the [LICENSE](LICENSE) file for details.
 
 ## 🔮 Next Steps
 
-- Fine-tune energy generation assumptions (taking machine type and intensity into account).
-- Adjust calculations by **age group** and **exercise compliance rates**.
-- Create **country-level dashboards** and visual comparisons.
-- Explore **scenarios** for increased participation or improved machine efficiency.
+- Expand dbt models to cover more complex energy comparisons
+- Create analyses comparing energy output by country and demographic attributes
+- Add more data quality tests to ensure robust transformations
+- Fine-tune energy generation assumptions (taking machine type and intensity into account)
+- Adjust calculations by **age group** and **exercise compliance rates**
+- Create **country-level dashboards** and visual comparisons
+- Explore **scenarios** for increased participation or improved machine efficiency
+
+## 🔄 Complete Workflow
+
+Our data pipeline follows a fully automated ETL (Extract, Transform, Load) process:
+
+1. **Extract**: 
+   - Airflow DAGs extract raw data from Eurostat and WRI data sources
+   - Data is loaded into the PostgreSQL Data Warehouse (DWH)
+
+2. **Transform**:
+   - The `transform_data` DAG triggers dbt to transform the raw data
+   - Models are built in logical layers (staging → intermediate → marts)
+   - Transformations include data cleaning, joins, aggregations, and business logic
+   - Tests validate data quality including specific checks for European countries
+
+3. **Analytics**:
+   - Transformed data is available in the DWH for analysis
+   - Future dashboards will visualize the results
+   - Reports can be generated using SQL queries against the transformed data
+
+This workflow ensures data consistency, reliability, and traceability throughout the entire process.
 
 ---
 
 ## 🤝 Contributions
 
 Ideas, corrections, and improvements are **very welcome**! Feel free to open an issue or a pull request.
+
+## 💾 Local Database Access
+
+When running the project locally, you can connect to the databases using the following details:
+
+### Airflow Metadata Database
+- **Host**: localhost
+- **Port**: 5432
+- **Database**: airflow
+- **Username**: airflow
+- **Password**: airflow
+
+### Data Warehouse (DWH)
+- **Host**: localhost
+- **Port**: 5433
+- **Database**: energy_dwh
+- **Username**: dwh_user
+- **Password**: dwh_password
+
+These can be accessed using any PostgreSQL client such as:
+- [pgAdmin](https://www.pgadmin.org/)
+- [DBeaver](https://dbeaver.io/)
+- [DataGrip](https://www.jetbrains.com/datagrip/)
+
+You can also connect programmatically using Python:
+
+```python
+import psycopg2
+
+# Connect to the DWH
+conn = psycopg2.connect(
+    host="localhost",
+    port=5433,
+    database="energy_dwh",
+    user="dwh_user",
+    password="dwh_password"
+)
+
+# Execute a query
+cursor = conn.cursor()
+cursor.execute("SELECT * FROM energy_comparison LIMIT 10")
+results = cursor.fetchall()
+
+# Print results
+for row in results:
+    print(row)
+
+# Close connection
+cursor.close()
+conn.close()
+```
 
 ---
 
