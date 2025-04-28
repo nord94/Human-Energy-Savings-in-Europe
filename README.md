@@ -16,6 +16,33 @@
 
 This project contains an Airflow setup to analyze energy savings data across Europe.
 
+## 📚 Data Sources
+
+| Topic | Source |
+|:-----|:------|
+| WHO Physical Activity Guidelines | [View Guidelines](https://www.who.int/initiatives/behealthy/physical-activity#:~:text=18%E2%80%9364%20years-,Should%20do%20at%20least%20150%20minutes%20of%20moderate%2Dintensity%20physical%20activity%20throughout%20the%20week) |
+| Total Population in Europe | [Eurostat Data](https://ec.europa.eu/eurostat/databrowser/view/tps00001/default/table?lang=en&category=t_demo.t_demo_pop) |
+| Population by Age Groups | [Eurostat Age Data](https://ec.europa.eu/eurostat/databrowser/view/tps00010/default/table?lang=en&category=t_demo.t_demo_ind) |
+| Energy Output from Workout Machines | [GoSportsArt - Eco-Powr FAQ](https://www.gosportsart.com/eco-powr-questions-answers/#:~:text=An%20average%201%2Dhour%20workout%20can%20produce%20approximately%20160%20watt%2Dhours%20of%20electricity) |
+
+---
+
+## 🔢 Assumptions
+
+- 🏋️ **Average energy generation** per 1-hour workout: **~160 Wh**.
+- 📅 **Weekly exercise time**: 150 minutes (~2.5 hours) per person.
+- ⚡️ **Energy-producing machines** assumed to operate at typical efficiency levels.
+
+---
+
+## 📈 Current Status
+
+- ✅ Data sources identified and connected.
+- ✅ Initial 2024 estimates calculated!
+- 📊 Visualizations coming soon.
+
+---
+
 ## Project Structure
 
 ```
@@ -118,12 +145,6 @@ This project contains an Airflow setup to analyze energy savings data across Eur
    echo "Airflow URL: http://$(terraform output -raw airflow_load_balancer_dns)"
    ```
 
-## Security Considerations
-
-- For production use, replace the default passwords with secure ones
-- Consider adding SSL/TLS encryption for the load balancer
-- Store sensitive information like database passwords in AWS Secrets Manager
-
 ## Data Pipeline
 
 The project includes automated data pipelines for extracting, transforming, and loading data related to Europe's energy usage:
@@ -174,36 +195,6 @@ The transformation layer follows software engineering best practices:
 ## License
 
 See the [LICENSE](LICENSE) file for details.
-
----
-
-## 📚 Data Sources
-
-| Topic | Source |
-|:-----|:------|
-| WHO Physical Activity Guidelines | [View Guidelines](https://www.who.int/initiatives/behealthy/physical-activity#:~:text=18%E2%80%9364%20years-,Should%20do%20at%20least%20150%20minutes%20of%20moderate%2Dintensity%20physical%20activity%20throughout%20the%20week) |
-| Total Population in Europe | [Eurostat Data](https://ec.europa.eu/eurostat/databrowser/view/tps00001/default/table?lang=en&category=t_demo.t_demo_pop) |
-| Population by Age Groups | [Eurostat Age Data](https://ec.europa.eu/eurostat/databrowser/view/tps00010/default/table?lang=en&category=t_demo.t_demo_ind) |
-| Energy Output from Workout Machines | [GoSportsArt - Eco-Powr FAQ](https://www.gosportsart.com/eco-powr-questions-answers/#:~:text=An%20average%201%2Dhour%20workout%20can%20produce%20approximately%20160%20watt%2Dhours%20of%20electricity) |
-
----
-
-## 🔢 Assumptions
-
-- 🏋️ **Average energy generation** per 1-hour workout: **~160 Wh**.
-- 📅 **Weekly exercise time**: 150 minutes (~2.5 hours) per person.
-- ⚡️ **Energy-producing machines** assumed to operate at typical efficiency levels.
-
----
-
-## 📈 Current Status
-
-- ✅ Data sources identified and connected.
-- ✅ Initial 2024 estimates calculated!
-- 📊 Visualizations coming soon.
-
-> _First approximate results for 2024:_  
-> _*(Insert an image/graph here)*_
 
 ---
 
