@@ -13,13 +13,20 @@ This project contains an Airflow setup to analyze energy savings data across Eur
 
 ```
 ├── dags/                  # Airflow DAGs
-│   └── example_dag.py     # Example DAG
+│   ├── dwh_connection_check.py     # DAG to verify DWH connection
+│   ├── example_dag.py              # Example DAG for testing
+│   ├── extract_eurostat_data.py    # DAG to extract population data from Eurostat
+│   └── extract_wri_data.py         # DAG to extract European power plant data from WRI
 ├── docker/                # Docker configuration files
 │   ├── airflow/           # Airflow Docker configuration
-│   │   └── Dockerfile     # Airflow Dockerfile
+│   │   ├── Dockerfile     # Airflow Dockerfile
+│   │   └── entrypoint.sh  # Custom entrypoint script for Airflow
 │   └── postgres/          # PostgreSQL Docker configuration
-│       ├── Dockerfile     # PostgreSQL Dockerfile
-│       └── init-scripts/  # PostgreSQL initialization scripts
+│       ├── Dockerfile             # PostgreSQL Dockerfile
+│       ├── entrypoint-wrapper.sh  # Custom entrypoint script for PostgreSQL
+│       └── init-scripts/          # PostgreSQL initialization scripts
+│           ├── 01-init.sql        # Airflow database init script
+│           └── 02-init-dwh.sql    # Data Warehouse init script
 ├── logs/                  # Airflow logs directory
 ├── plugins/               # Airflow plugins directory
 ├── scripts/               # Utility scripts
@@ -29,6 +36,7 @@ This project contains an Airflow setup to analyze energy savings data across Eur
 │   ├── outputs.tf         # Terraform outputs
 │   └── variables.tf       # Terraform variables
 ├── docker-compose.yml     # Docker Compose configuration for local development
+├── docker-compose-build.yml # Docker Compose configuration for building images
 ├── LICENSE                # Project license
 └── README.md              # This file
 ```
@@ -97,6 +105,34 @@ This project contains an Airflow setup to analyze energy savings data across Eur
 - For production use, replace the default passwords with secure ones
 - Consider adding SSL/TLS encryption for the load balancer
 - Store sensitive information like database passwords in AWS Secrets Manager
+
+## Data Pipeline
+
+The project includes automated data pipelines for extracting and loading data related to Europe's energy usage:
+
+### Data Sources
+
+1. **Eurostat Population Data**: Demographics data for European countries, extracted daily
+2. **WRI Power Plant Database**: Data about power plants across Europe, extracted weekly
+
+### Data Warehouse (DWH)
+
+The setup includes a dedicated PostgreSQL database serving as a Data Warehouse with:
+
+- Schema for energy consumption data
+- Tables for population statistics
+- European power plant information
+
+### Airflow DAGs
+
+DAGs (Directed Acyclic Graphs) handle the ETL processes:
+
+- `dwh_connection_check`: Verifies connectivity to the DWH database
+- `extract_eurostat_data`: Extracts and loads population statistics
+- `extract_wri_data`: Extracts and loads European power plant data
+- `example_dag`: Sample DAG for testing the Airflow setup
+
+All DAGs follow a pattern of checking database connectivity before extracting and loading data, with proper error handling and logging.
 
 ## License
 
