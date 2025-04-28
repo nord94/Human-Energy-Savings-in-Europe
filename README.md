@@ -7,7 +7,100 @@
 
 > _Turning sweat into watts!_ 🚴⚡
 
-This project estimates **how much electricity could be generated** if the entire population of any European country completed the **WHO-recommended** amount of exercise using **energy-producing gym machines**.
+This project contains an Airflow setup to analyze energy savings data across Europe.
+
+## Project Structure
+
+```
+├── dags/                  # Airflow DAGs
+│   └── example_dag.py     # Example DAG
+├── docker/                # Docker configuration files
+│   ├── airflow/           # Airflow Docker configuration
+│   │   └── Dockerfile     # Airflow Dockerfile
+│   └── postgres/          # PostgreSQL Docker configuration
+│       ├── Dockerfile     # PostgreSQL Dockerfile
+│       └── init-scripts/  # PostgreSQL initialization scripts
+├── logs/                  # Airflow logs directory
+├── plugins/               # Airflow plugins directory
+├── scripts/               # Utility scripts
+│   └── build_and_push.sh  # Script to build and push Docker images to ECR
+├── terraform/             # Terraform configuration
+│   ├── main.tf            # Main Terraform configuration
+│   ├── outputs.tf         # Terraform outputs
+│   └── variables.tf       # Terraform variables
+├── docker-compose.yml     # Docker Compose configuration for local development
+├── LICENSE                # Project license
+└── README.md              # This file
+```
+
+## Local Development
+
+### Prerequisites
+
+- Docker and Docker Compose
+- AWS CLI
+- Terraform
+
+### Running locally
+
+1. Clone the repository:
+   ```
+   git clone https://github.com/yourusername/Human-Energy-Savings-in-Europe.git
+   cd Human-Energy-Savings-in-Europe
+   ```
+
+2. Start the containers:
+   ```
+   docker-compose up -d
+   ```
+
+3. Access Airflow at [http://localhost:8080](http://localhost:8080) with the following credentials:
+   - Username: admin
+   - Password: admin
+
+## AWS Deployment
+
+### Prerequisites
+
+- AWS CLI configured with appropriate credentials
+- Terraform
+- Docker
+
+### Deployment Steps
+
+1. Initialize Terraform:
+   ```
+   cd terraform
+   terraform init
+   ```
+
+2. Apply the Terraform configuration:
+   ```
+   terraform apply
+   ```
+
+3. Build and push the Docker images to ECR:
+   ```
+   cd ../scripts
+   chmod +x build_and_push.sh
+   ./build_and_push.sh
+   ```
+
+4. Access the deployed Airflow instance:
+   ```
+   cd ../terraform
+   echo "Airflow URL: http://$(terraform output -raw airflow_load_balancer_dns)"
+   ```
+
+## Security Considerations
+
+- For production use, replace the default passwords with secure ones
+- Consider adding SSL/TLS encryption for the load balancer
+- Store sensitive information like database passwords in AWS Secrets Manager
+
+## License
+
+See the [LICENSE](LICENSE) file for details.
 
 ## 💡 Project Idea
 
@@ -38,23 +131,6 @@ This project estimates **how much electricity could be generated** if the entire
 
 ---
 
-## Infrastructure Setup (AWS with Terraform)
-
-This project uses Terraform to automate infrastructure deployment, including Airflow (ECS Fargate) and PostgreSQL (RDS) in AWS.
-
-### Prerequisites:
-- Terraform installed ([Install Terraform](https://developer.hashicorp.com/terraform/downloads))
-- AWS CLI configured with credentials ([Setup AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html))
-
-### Deploying Infrastructure:
-```bash
-cd infra
-terraform init
-terraform apply
-```
-
----
-
 ## 📈 Current Status
 
 - ✅ Data sources identified and connected.
@@ -78,12 +154,6 @@ terraform apply
 ## 🤝 Contributions
 
 Ideas, corrections, and improvements are **very welcome**! Feel free to open an issue or a pull request.
-
----
-
-## 📜 License
-
-This project is licensed under the **MIT License** — feel free to use, remix, and share!
 
 ---
 
