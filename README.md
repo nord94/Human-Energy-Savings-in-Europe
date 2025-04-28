@@ -1,7 +1,5 @@
 # 🌍 Human Energy Savings in Europe
 
-[![Data Collection](https://img.shields.io/badge/Stage-Data%20Collection-blue)]()
-[![Modeling](https://img.shields.io/badge/Stage-Modeling-yellow)]()
 [![Visualization](https://img.shields.io/badge/Stage-Visualization-brightgreen)]()
 [![Status](https://img.shields.io/badge/Status-In%20Progress-lightgrey)]()
 
